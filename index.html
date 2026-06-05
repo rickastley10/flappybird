@@ -36,8 +36,8 @@
    ============================================================ */
 const WINDOW_WIDTH = 400;
 const WINDOW_HEIGHT = 400;
-const w = 20;
-const h = 20;
+const w = 40;
+const h = 40;
 
 /* ============================================================
    GLOBALS
@@ -88,11 +88,28 @@ function handleInput(e) {
     const scaleY = WINDOW_HEIGHT / rect.height;
     const canvasX = x * scaleX;
     const canvasY = y * scaleY;
+
     if(menu===0){
+      if(canvasX <= 50 && canvasY <=30){
+        menu=1
+      }
+      else{
         vel=10
+        wing.currentTime=0
+        wing.play()
+        bicon=1
+        
+      }
+        
     }
     else{
+      if(canvasX <= 50 && canvasY <=30){
         menu=0
+      }
+      else{
+        menu=0
+      }
+        
     }
     
 }
@@ -118,8 +135,14 @@ function reset(){
 }
 reset()
 menu=1
+bicon=1
 let birdImg = new Image();
 birdImg.src = 'yellowbird-midflap.gif';
+let birdd = new Image();
+birdd.src = 'yellowbird-downflap.gif';
+let birdu = new Image();
+birdu.src = 'yellowbird-upflap.gif';
+
 let bg = new Image();
 bg.src = 'background-day.gif';
 
@@ -130,6 +153,10 @@ up.src = 'pipe-green2.gif';
 
 let mainmenu = new Image();
 mainmenu.src = 'mainmenu.gif';
+
+let point = new Audio('point.wav')
+let wing = new Audio('wing.wav')
+let hit = new Audio('hit.wav')
 /* ============================================================
    MAIN LOOP
    ============================================================ */
@@ -138,55 +165,68 @@ function game_loop() {
         
         ctx.font = "15px Arial";
         if(menu===0){
-
+            if(keys["p"]){
+                menu=1
+            }
             
             if(keys[" "]){
                 vel=10
+                wing.currentTime=0
+                wing.play()
+                bicon=1
             }
             else{
                 vel=vel-1
+                if(bicon!==9){
+                  bicon=bicon+1
+                }
+                
             }
             py=py-vel
 
-            pipe1yu=pipe1y-100
+            pipe1yu=pipe1y-150
             pipe1x=pipe1x-5
             if(pipe1x<=-w*2){
                 pipe1x=400
                 x=Math.floor(Math.random()*2)+1
                 
                 if(x===1){
-                    pipe1y=200-(Math.floor(Math.random()*5))*20
+                    pipe1y=200+(Math.floor(Math.random()*3))*w
                 }
                 if(x===2){
-                    pipe1y=200+(Math.floor(Math.random()*5))*20
+                    pipe1y=200+(Math.floor(Math.random()*4))*w
                 }
 
-                score=score+1
-                console.log(score)
+                
                 
             }
 
 
-            pipe2yu=pipe2y-100
+            pipe2yu=pipe2y-150
             pipe2x=pipe2x-5
             if(pipe2x<=-w*2){
                 pipe2x=400
                 x=Math.floor(Math.random()*2)+1
                 
                 if(x===1){
-                    pipe2y=200-(Math.floor(Math.random()*5))*20
+                    pipe2y=200+(Math.floor(Math.random()*3))*w
                     
                 }
                 if(x===2){
-                    pipe2y=200+(Math.floor(Math.random()*5))*20
+                    pipe2y=200+(Math.floor(Math.random()*4))*w
                 }
-                score=score+1
-                    console.log(score)
+                
             }
-
+            if(pipe1x+w*2 === 60 || pipe2x+w*2 === 60 ){
+              score=score+1
+              point.currentTime=0
+              point.play()
+            }
 
             if(pipe1x <= px+w && px+w <= pipe1x+w*2 && ((py+h >= pipe1y)||(pipe1yu >= py))){
                 reset()
+                hit.currentTime=0
+                hit.play()
             }
             else if(pipe1x <= px+w && px+w <= pipe1x+w*2){
                 
@@ -194,6 +234,8 @@ function game_loop() {
             
             if(pipe2x <= px+w && px+w <= pipe2x+w*2 && ((py+h >= pipe2y)||(pipe2yu >= py))){
                 reset()
+                hit.currentTime=0
+                hit.play()
             }
             else if(pipe2x <= px+w && px+w <= pipe2x+w*2){
                 
@@ -209,7 +251,14 @@ function game_loop() {
 
 
             //bird
-            ctx.drawImage(birdImg, px, py, w, h)
+            if(bicon<4){
+              ctx.drawImage(birdu, px, py, w, h)
+            }else if(bicon>3 && bicon <7){
+              ctx.drawImage(birdImg, px, py, w, h)
+            }else{
+              ctx.drawImage(birdd, px, py, w, h)
+            }
+            
             //ctx.fillStyle="#ff00ff"
             //ctx.fillRect(px, py, w, h)
 
@@ -231,10 +280,21 @@ function game_loop() {
             
             ctx.drawImage(lp, pipe2x, pipe2y, w*2, WINDOW_HEIGHT)
             ctx.drawImage(up, pipe2x, pipe2yu, w*2, -WINDOW_HEIGHT)
+
+            ctx.fillStyle="#ffffff"
+            ctx.fillText(score, 180, 100)
+
+            ctx.fillStyle="#000000"
+            ctx.fillText("pause", 10, 10)
         }
         else if(menu===1){
             ctx.drawImage(mainmenu, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
+            ctx.fillStyle="#000000"
+            ctx.fillText("unpause", 10, 10)
             if(keys[" "]){
+                menu=0
+            }
+            if(keys["p"]){
                 menu=0
             }
         }
