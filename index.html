@@ -97,7 +97,7 @@ function handleInput(e) {
         vel=10
         wing.currentTime=0
         wing.play()
-        bicon=1
+        
         
       }
         
@@ -173,13 +173,11 @@ function game_loop() {
                 vel=10
                 wing.currentTime=0
                 wing.play()
-                bicon=1
+                
             }
             else{
                 vel=vel-1
-                if(bicon!==9){
-                  bicon=bicon+1
-                }
+                
                 
             }
             py=py-vel
@@ -251,12 +249,15 @@ function game_loop() {
 
 
             //bird
-            if(bicon<4){
-              ctx.drawImage(birdu, px, py, w, h)
-            }else if(bicon>3 && bicon <7){
-              ctx.drawImage(birdImg, px, py, w, h)
-            }else{
+            if(vel <0){
               ctx.drawImage(birdd, px, py, w, h)
+              bicon=1
+            }else if(bicon<=5){
+
+              ctx.drawImage(birdImg, px, py, w, h)
+              bicon=bicon+1
+            }else{
+              ctx.drawImage(birdu, px, py, w, h)
             }
             
             //ctx.fillStyle="#ff00ff"
