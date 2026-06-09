@@ -21,8 +21,8 @@
     background: black;
     touch-action: none;
 
-    width: min(100vw, 100vh);
-    height: min(100vw, 100vh);
+    width: 100vw;
+    height: 100vh;
 }
 </style>
 </head>
@@ -132,9 +132,12 @@ function reset(){
     pipe1yu=pipe1y-100
 
     score=0
+
+    menu=1
 }
-reset()
 menu=1
+reset()
+
 bicon=1
 let birdImg = new Image();
 birdImg.src = 'yellowbird-midflap.gif';
