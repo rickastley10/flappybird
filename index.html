@@ -96,7 +96,8 @@ function handleInput(e) {
       else{
         vel=10
         wing.currentTime=0
-        wing.play()
+        if(sound ===1){wing.play()}
+        
         
         
       }
@@ -104,7 +105,13 @@ function handleInput(e) {
     }
     else{
       if(canvasX <= 50 && canvasY <=30){
-        menu=0
+        if (sound===1){
+            sound=0
+        }
+        else{
+            sound=1
+        }
+        
       }
       else{
         menu=0
@@ -138,6 +145,7 @@ function reset(){
 menu=1
 reset()
 
+sound=1
 bicon=1
 let birdImg = new Image();
 birdImg.src = 'yellowbird-midflap.gif';
@@ -175,7 +183,7 @@ function game_loop() {
             if(keys[" "]){
                 vel=10
                 wing.currentTime=0
-                wing.play()
+                if(sound ===1){wing.play()}
                 
             }
             else{
@@ -221,13 +229,13 @@ function game_loop() {
             if(pipe1x+w*2 === 60 || pipe2x+w*2 === 60 ){
               score=score+1
               point.currentTime=0
-              point.play()
+              if(sound ===1){point.play()}
             }
 
             if(pipe1x <= px+w && px+w <= pipe1x+w*2 && ((py+h >= pipe1y)||(pipe1yu >= py))){
                 reset()
                 hit.currentTime=0
-                hit.play()
+                if(sound ===1){hit.play()}
             }
             else if(pipe1x <= px+w && px+w <= pipe1x+w*2){
                 
@@ -236,7 +244,7 @@ function game_loop() {
             if(pipe2x <= px+w && px+w <= pipe2x+w*2 && ((py+h >= pipe2y)||(pipe2yu >= py))){
                 reset()
                 hit.currentTime=0
-                hit.play()
+                if(sound ===1){hit.play()}
             }
             else if(pipe2x <= px+w && px+w <= pipe2x+w*2){
                 
@@ -295,6 +303,8 @@ function game_loop() {
             ctx.drawImage(mainmenu, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT)
             ctx.fillStyle="#000000"
             ctx.fillText("unpause", 10, 10)
+            ctx.fillStyle="#000000"
+            ctx.fillText("toggle sound", 10, 30)
             if(keys[" "]){
                 menu=0
             }
